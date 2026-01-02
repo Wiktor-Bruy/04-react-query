@@ -27,10 +27,6 @@ export default async function fetchMovies(
       },
     }
   );
-  // if (res.data.results) {
-  //   return res.data;
-  // }
-  // return [];
 
   return res.data;
 }

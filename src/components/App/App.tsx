@@ -10,6 +10,8 @@ import fetchMovies from '../../services/movieService.ts';
 import { useState } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import ReactPaginate from 'react-paginate';
+import toast, { Toaster } from 'react-hot-toast';
+import { useEffect } from 'react';
 
 import { type Movie } from '../../types/movie.ts';
 
@@ -24,6 +26,19 @@ export default function App() {
     enabled: word !== '',
     placeholderData: keepPreviousData,
   });
+
+  useEffect(() => {
+    if (isSuccess && data && data.results.length === 0) {
+      toast('No movies found for your request.', {
+        icon: '😋',
+        style: {
+          borderRadius: '25px',
+          background: '#333',
+          color: '#fff',
+        },
+      });
+    }
+  }, [data, isSuccess]);
 
   function onClickCard(movie: Movie): void {
     setModal(movie);
@@ -42,6 +57,7 @@ export default function App() {
 
   return (
     <>
+      <Toaster />
       <SearchBar onSubmit={findFilms} />
       {isSuccess && totalPages > 1 && (
         <ReactPaginate
